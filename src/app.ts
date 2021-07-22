@@ -14,7 +14,8 @@ app.get("/test", (req, res) => {
 app.post("/recommendations", recommendationsController.songRecommendation);
 app.post("/recommendations/:id/upvote", recommendationsController.upVote);
 app.post("/recommendations/:id/downvote", recommendationsController.downVote);
-app.get("/recommendations/rendom", recommendationsController.randomSong)
+app.get("/recommendations/random", recommendationsController.randomSong)
+app.get("/recommendations/top/:amount", recommendationsController.sortingSongs)
 
 
 export default app;

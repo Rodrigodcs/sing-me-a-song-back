@@ -4,10 +4,10 @@ const { Pool }= pg;
 
 const config= {
     host:"localhost",
-    port:5423,
+    port:5432,
     user:"postgres",
     password:"123456",
-    database:"testando"
+    database:"sing_me_a_song"
 }
 const connection = new Pool(config)
 
