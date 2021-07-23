@@ -2,9 +2,17 @@
 
 import * as recommendationsRepository from "../repositories/recommendationsRepository"
 
+export async function createNewSong(name:String,youtubeLink:String,genreId:number){
+    await recommendationsRepository.create(name, youtubeLink, genreId)
+}
+
+export async function verifyIfSongExists(id:number){
+    return await recommendationsRepository.getSongById(id)
+}
+
 export async function votingById(id:number,upvote:boolean){
     if(upvote){
-        await recommendationsRepository.changeScore(id,1)
+        const teste = await recommendationsRepository.changeScore(id,1)
     }else{
         const song = await recommendationsRepository.getSongById(id)
         if(song.score<=-5){
@@ -15,6 +23,10 @@ export async function votingById(id:number,upvote:boolean){
     }
 }
 
+export async function verifySongs(){
+    return await recommendationsRepository.getAllSongs();
+}
+
 export async function randomizedSongs(){
     const songs = await recommendationsRepository.getAllSongs()
     const highScored:object[] = []
@@ -22,6 +34,12 @@ export async function randomizedSongs(){
     songs.forEach(song=>{
         song.score>10?highScored.push(song):lowScored.push(song)
     })
+    if(highScored.length===0){
+        return lowScored
+    }
+    if(lowScored.length===0){
+        return highScored
+    }
     return Math.random()<0.7?highScored:lowScored
 }
 
@@ -31,14 +49,6 @@ export function randomizeSingleSong(sortedSongs:object[]){
 }
 
 export async function topSongs(amount:number){
-    const songs = await recommendationsRepository.getAllSongs()
-    const sorted = songs.sort((song1,song2)=>{
-        if(song1.score>song2.score){
-            return -1;
-        }else{
-            return 1;
-        }
-    })
-    const sortedAmount = sorted.filter((song,songIndex)=> songIndex<amount)
-    return sortedAmount
+    const sortedSongs = await recommendationsRepository.getSongsSortedByScore(amount)
+    return sortedSongs
 }
